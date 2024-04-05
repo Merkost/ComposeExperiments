@@ -32,11 +32,45 @@ class MainActivity : ComponentActivity() {
         setContent {
             ComposeExperimentsTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(name = "Hey there!")
+                    Column(
+                        modifier = Modifier
+                            .padding(innerPadding)
+                            .padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        BufferingSlider()
+                    }
                 }
             }
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+@Preview
+fun BufferingSlider(modifier: Modifier = Modifier) {
+
+    Surface(modifier = Modifier.padding(16.dp)) {
+
+        var sliderValue by remember { mutableFloatStateOf(0.3f) }
+
+        Slider(
+            value = sliderValue,
+            onValueChange = { sliderValue = it },
+            track = { sliderPositions ->
+                SliderDefaults.Track(
+                    sliderPositions = sliderPositions,
+                    modifier = Modifier.pulsatingEffect(
+                        currentValue = sliderValue,
+                        isVisible = true,
+                        color = Color.Black
+                    )
+                )
+            }
+        )
+    }
+
 }
 
 @Composable
